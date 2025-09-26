@@ -1,4 +1,4 @@
-package ladder;
+package ladder.domain;
 
 public class Node {
     private Direction direction;
@@ -21,6 +21,10 @@ public class Node {
             position.next();
             return;
         }
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 
     public void setRightNode(){

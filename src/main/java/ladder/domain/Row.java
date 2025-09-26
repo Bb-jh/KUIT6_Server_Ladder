@@ -1,23 +1,47 @@
-package ladder;
+package ladder.domain;
+
+import ladder.message.ErrorMessage;
+import ladder.validator.GreaterThanOne;
 
 public class Row {
 
     private final Node[] nodes;
 
-    public Row(GreaterThanOne numberOfPerson){
+    public Row(GreaterThanOne numberOfPerson) {
         nodes = new Node[numberOfPerson.getNumber()];
-        for(int i = 0; i < numberOfPerson.getNumber(); i++){
+        for (int i = 0; i < numberOfPerson.getNumber(); i++) {
             nodes[i] = Node.from(Direction.NONE);
         }
     }
 
-    public void nextPosition(Position position){
+    public String buildRowString(int currentRowIndex, int playerRow, Position playerPosition) {
+        StringBuilder rowBuilder = new StringBuilder();
+        for (int j = 0; j < nodes.length; j++) {
+            String nodeString = getNodeString(nodes[j], currentRowIndex, j, playerRow, playerPosition);
+            rowBuilder.append(nodeString);
+        }
+        rowBuilder.setLength(rowBuilder.length() - 1);
+        return rowBuilder.toString();
+    }
+
+    private String getNodeString(Node node, int currentRowIndex, int currentColIndex, int playerRow, Position playerPosition) {
+        int nodeString = node.getDirection().getValue();
+        boolean isPlayerHere = (currentRowIndex == playerRow) && (currentColIndex == playerPosition.getValue());
+
+        if (isPlayerHere) {
+            return nodeString + "* ";
+        }
+        return nodeString + "  ";
+    }
+
+
+    public void nextPosition(Position position) {
         validatePosition(position);
         nodes[position.getValue()].move(position);
     }
 
     private void validatePosition(Position position) {
-        if(isInvalidPosition(position)){
+        if (isInvalidPosition(position)) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_POSITION.getMessage());
         }
     }
@@ -26,7 +50,7 @@ public class Row {
         return position.isBiggerThan(nodes.length - 1);
     }
 
-    public void drawLine(Position startPosition){
+    public void drawLine(Position startPosition) {
         validateDrawLinePosition(startPosition);
         setDirectionBetweenNextPosition(startPosition);
     }

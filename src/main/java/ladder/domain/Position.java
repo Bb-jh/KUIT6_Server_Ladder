@@ -1,4 +1,6 @@
-package ladder;
+package ladder.domain;
+
+import ladder.message.ErrorMessage;
 
 public class Position {
     private int position;

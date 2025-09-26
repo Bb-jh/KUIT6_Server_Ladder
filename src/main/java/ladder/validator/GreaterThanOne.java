@@ -1,4 +1,6 @@
-package ladder;
+package ladder.validator;
+
+import ladder.message.ErrorMessage;
 
 public class GreaterThanOne {
 
